@@ -2,6 +2,16 @@
 
 A Bluetooth-controlled cricket scoreboard system using ESP32-S3 and NeoPixel LED strips.
 
+## Project Structure
+
+- **Scoreboard_ESP32S3/** - Main cricket scoreboard application
+- **Matrix Testing/** - LED matrix panel test suite
+  - **LED_Matrix_Test_Protomatter/** - Working test with remapping (recommended)
+  - **LED_Matrix_Test_FIXED/** - Simplified version
+  - **LED_Matrix_Test/** - Original test with alternative library
+  - **ROW_MAPPING_TEST/** - Diagnostic tool for discovering panel mappings
+  - **LED_MATRIX_SOLUTION.md** - Technical documentation
+
 ## Hardware Requirements
 
 - **ESP32-S3 Development Board**
@@ -12,6 +22,13 @@ A Bluetooth-controlled cricket scoreboard system using ESP32-S3 and NeoPixel LED
   - Target/First Innings: 3 digits (189 LEDs)
   - Batsman A Score: 3 digits (189 LEDs)
   - Batsman B Score: 3 digits (189 LEDs)
+
+### Optional: LED Matrix Panel
+
+The project also includes support for a 64x32 P3 LED matrix panel in `Matrix Testing/`:
+- **Adafruit Protomatter** library
+- Custom remapping for non-standard panel addressing
+- See `Matrix Testing/LED_Matrix_Test_Protomatter/README.md` for details
 
 ## Pin Configuration
 
