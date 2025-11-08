@@ -66,6 +66,7 @@ Open Serial Monitor at 115200 baud and send:
 - **o** - Toggle rotation (0-3)
 - **m** - Address mapping test (tries different pin combinations)
 - **x** - Simple pixel test (corner pixels and lines)
+- **s** - Start scrolling text test (continues until `0`)
 - **h** - Show help
 - **0** - Clear display
 
@@ -81,7 +82,7 @@ o - Toggle rotation (0-3)
 m - Address mapping test (tries A/B/C orders)
 x - Simple pixel test
 h - Show this help
-0 - Clear display
+0 - Clear display / stop scrolling
 ```
 
 ## Custom Remapping Class
