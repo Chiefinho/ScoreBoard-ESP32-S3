@@ -111,6 +111,9 @@ RowRemappedMatrix matrix(&protomatter);
 // Color definitions
 uint16_t RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, WHITE, BLACK;
 
+// Scrolling text state
+static bool scrollingActive = false;
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
@@ -163,6 +166,11 @@ void loop() {
     handleCommand(command);
   }
   
+  // Run scrolling if active
+  if (scrollingActive) {
+    scrollingTextTest();
+  }
+  
   delay(10);
 }
 
@@ -184,10 +192,15 @@ void handleCommand(char command) {
     case 'x':
       simplePixelTest();
       break;
+    case 's':
+      scrollingActive = true;
+      Serial.println("Scrolling started. Press '0' to stop.");
+      break;
     case 'h':
       printHelp();
       break;
     case '0':
+      scrollingActive = false;
       clearDisplay();
       break;
     default:
@@ -202,6 +215,7 @@ void printHelp() {
   Serial.println("o - Toggle rotation (0-3)");
   Serial.println("m - Address mapping test (tries A/B/C orders)");
   Serial.println("x - Simple pixel test");
+  Serial.println("s - Scrolling text test");
   Serial.println("h - Show this help");
   Serial.println("0 - Clear display");
   Serial.println();
@@ -211,9 +225,9 @@ void displayStartupMessage() {
   matrix.fillScreen(BLACK);
   matrix.setTextColor(GREEN);
   matrix.setTextSize(1);
-  matrix.setCursor(2, 8);
+  matrix.setCursor(2, 0);
   matrix.print("ESP32-S3");
-  matrix.setCursor(2, 20);
+  matrix.setCursor(2, 12);
   matrix.print("PROTOMATTER");
   matrix.show();
   delay(2000);
@@ -345,6 +359,33 @@ void waitForInput() {
     Serial.read();
   }
   Serial.println();
+}
+
+void scrollingTextTest() {
+  Serial.println("=== SCROLLING TEXT TEST ===");
+  
+  static int16_t x = PANEL_WIDTH; // Start text off-screen to the right
+  const char* text = "ESP32-S3 LED Matrix - Scrolling Text Test! ";
+  
+  matrix.fillScreen(BLACK);
+  matrix.setTextWrap(false); // Important for scrolling!
+  matrix.setTextSize(1);
+  matrix.setTextColor(CYAN);
+  
+  // Set cursor position - centered vertically
+  // With 8-pixel tall font, center is around HEIGHT/2 - 4
+  matrix.setCursor(x, PANEL_HEIGHT / 2 - 4);
+  matrix.print(text);
+  matrix.show();
+  
+  x--;
+  
+  // Reset position when text has scrolled completely off-screen
+  if (x < -(int16_t)(strlen(text) * 6)) {
+    x = PANEL_WIDTH;
+  }
+  
+  delay(30);
 }
 
 // --- Address mapping diagnostic ---
